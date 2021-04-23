@@ -1,0 +1,23 @@
+{
+  "name": "pdf-parse",
+  "version": "1.0.0",
+  "description": "Prueba",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joselrdg/pdf-parse.git"
+  },
+  "author": "Jose Luis Rodriguez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joselrdg/pdf-parse/issues"
+  },
+  "homepage": "https://github.com/joselrdg/pdf-parse#readme",
+  "dependencies": {
+    "pdf-parse": "^1.1.1"
+  }
+}
