@@ -169,12 +169,8 @@ const pdfAObjt = (numeroE) => new Promise(async (resolve, reject) => {
                     }
                 });
             });
-            // dataObj.text = arrText4
-            // const objFin = {};
-
-
             arrData.push(dataObj)
-            // console.log('Objeto creado. Pdfs procesados: ' + (contador + 1))
+            console.log('Objeto creado. Pdfs procesados: ' + (contador + 1))
             contador++
         });
         contadorFun()
@@ -183,20 +179,11 @@ const pdfAObjt = (numeroE) => new Promise(async (resolve, reject) => {
 }
 )
 
-pdfAObjt(10)
-    .then(d => {
-        // d.forEach(element => {
-        //     console.log(element.raza)
-        // });
-        console.log(d)
-    })
-
-
-
-    // resolveAfter('./pdfs/grupo1/0.pdf')
-    // for (urls in arrayUrlS) {
-
-    //    const data = await resolveAfter(arrayUrlS[urls])
-    //    arrData.push(data)
-    //     console.log('trabajo hecho')
-    // }
+// //Prueba
+// pdfAObjt(10)
+//     .then(d => {
+//         // d.forEach(element => {
+//         //     console.log(element.raza)
+//         // });
+//         console.log(d)
+//     })
