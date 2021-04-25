@@ -32,6 +32,27 @@ for (let i = 0; i < numeroPdfs; i++) {
     nombPdf.push(name)
 }
 
+pdf(dataBuffer).then(function (data) {
+    let arrText = []
+    const arrParse = data.text.split(/\n \n{1,}/)
+    arrParse.forEach((element, i) => {
+        let p = element
+            .replace(/(_{3,} | {10,}|\n)/g, '')
+            .replace(/(_{3,} | {10,}|\n)/g, '')
+            .replace((/^ | $/), '')
+            .replace(/ $/, '')
+        if (p !== '') { arrText.push(p) }
+    });
+    const arrText2 = []
+    const position = []
+    let key = false
+    arrText.forEach((element, i) => {
+        const reg = [A - Z]
+        if (reg.test(element[2])) {
+            position.push(i)
+        }
+
+
 console.log(nombPdf)
 
 let contador = 0
