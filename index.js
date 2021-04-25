@@ -1,182 +1,202 @@
-// ('./pdfs/341g03-es.pdf');
 const fs = require('fs');
 const pdf = require('pdf-parse');
-// const url = './pdfs/341g03-es.pdf'
-const arrayUrlS = []
-const arrData = []
-
-// // grupo1
-const numeroPdfs = 42;
-// // grupo2
-// const numeroPdfs = 52;
-// // grupo3
-// const numeroPdfs = 34;
-// // grupo4 = 0
-// // grupo5
-// const numeroPdfs = 40;
-// // grupo6
-// const numeroPdfs = 69;
-// // grupo7
-// const numeroPdfs = 34;
-// // grupo8
-// const numeroPdfs = 22;
-// // grupo9
-// const numeroPdfs = 26;
-// // grupo10
-// const numeroPdfs = 13;
-
-const nombPdf = []
-
-for (let i = 0; i < numeroPdfs; i++) {
-    const name = `./pdfs/grupo1/${i}.pdf`
-    nombPdf.push(name)
-}
-
-console.log(nombPdf)
-
-let contador = 0
 
 
-const contadorFun = () => {
-    if (contador < numeroPdfs) {
-        resolveAfter(nombPdf[contador])
-    } else {
-        console.log(arrData)
-        return console.log('Tarea terminada totalmente')
+const pdfAObjt = (numeroE) => new Promise(async (resolve, reject) => {
+    const nombPdf = []
+    const arrData = []
+
+    for (let i = 0; i < numeroE; i++) {
+        const name = `/tmp/${i}.pdf`
+        // const name = `/tmp/2.pdf`
+        nombPdf.push(name)
     }
-}
 
-// hacer que pase un arr de arrs y los procese
+    console.log(nombPdf)
 
-async function resolveAfter(url) {
+    let contador = 0
 
-    let dataBuffer = fs.readFileSync(url);
-
-    pdf(dataBuffer).then(function (data) {
-        let arrText = []
-        const arrParse = data.text.split(/\n \n{1,}/)
-        arrParse.forEach((element, i) => {
-            element = element.replace(/\n/g, ' ')
-            if (!(/fci|FCI/g).test(arrParse[i])) {
-                if (!((/^TRADUCCI|^Traducci/)).test(element)) {
-                    arrText.push(element)
-                }
-            }
-        });
-        let arrText2 = [];
-        arrText.forEach((element, i) => {
-            if (!(/^FEDERATION/).test(arrText[i])) {
-                arrText2.push(element)
-            }
-        });
-        let arrText3 = [];
-        arrText2.forEach((element, i) => {
-            element = element.replace(/ {1,}/g, ' ')
-            element = element.replace(/^ |^  /, '')
-            if (!(/^[0-9]/).test(element)) {
-                element = element.replace(/ {1,}$/, '')
-                arrText3.push(element)
-
-            }
-        });
-
-        let arrText4 = []
-        arrText3.forEach((e => {
-            if (!(/^[0-9]/).test(e) && e.length > 2) {
-                arrText4.push(e)
-            }
-        }))
-
-        let dataObj = {}
-
-        if ((/[()]/).test(arrText4[0])) {
-            let arr1 = arrText4[0].replace(')', '')
-            let arr = arr1.split('(')
-            dataObj.name = arr
+    const contadorFun = () => {
+        if (contador < numeroE) {
+            resolveAfter(nombPdf[contador])
         } else {
-            dataObj.name = arrText4[0]
+            console.log('Tarea terminada totalmente')
+            resolve(arrData)
         }
-        const regx = [
-            (/^ORIGEN|^Origen/),
-            (/^FECHA|^Fecha/),
-            (/^UTILIZACI|^Utilizaci/),
-            (/^BREVE|^Breve/),
-            (/^APARIENCIA|^Apariencia/),
-            (/^COMPORTAMIENTO|^Comportamiento/),
-            (/^CABEZA|^Cabeza/),
-            (/^REGION CRANEAL|^Region craneal/),
-            (/^REGION FACIAL|^Region facial/),
-            (/^OJOS|^Ojos/),
-            (/^OREJAS|^Orejas/),
-            (/^CUELLO|^Cuello/),
-            (/^CUERPO|^Cuerpo/),
-            (/^MIEMBROS ANTERIORES|^Miembros anteriores/),
-            (/^MIEMBROS POSTERIORES|^Miembros posteriores/),
-            (/^MOVIMIENTO|^Movimiento/),
-            (/^PIEL|^Piel/),
-            (/^PELO|^Pelo/),
-            (/^COLOR|^Color/),
-            (/^TAMAÑO|^Tamaño/),
-            (/^FALTAS|^Faltas/),
-            (/^FALTAS GRAVES|^Faltas graves/),
-            (/^FALTAS DESCALIFICANTES|^Faltas descalificantes/),
-        ]
-        const nom = [
-            'origen',
-            'fecha',
-            'utilizado',
-            'historia',
-            'apariencia',
-            'comportamiento',
-            'cabeza',
-            'craneal',
-            'facial',
-            'ojos',
-            'orejas',
-            'cuello',
-            'cuerpo',
-            'eanteriores',
-            'eposteriores',
-            'movimiento',
-            'piel',
-            'pelo',
-            'color',
-            'tamano',
-            'faltas',
-            'graves',
-            'descalifivantes',
-        ]
-        arrText4.forEach((element, i) => {
-            element = element.replace(/(.)$/, '')
-            regx.forEach((e, ind) => {
-                if ((e).test(element)) {
-                    if ((/: /g).test(element)) {
-                        let arr = element.split(/: /)
-                        if (arr.length === 2) {
-                            dataObj[nom[ind]] = arr[1]
-                        } else {
-                            dataObj[nom[ind]] = arr
-                        }
-                    } else {
-                        dataObj[nom[ind]] = element // optimizar
+    }
+
+    async function resolveAfter(url) {
+
+        let dataBuffer = fs.readFileSync(url);
+
+        await pdf(dataBuffer).then(function (data) {
+            let arrText = []
+            const arrParse = data.text.split(/\n \n{1,}/)
+            arrParse.forEach((element, i) => {
+                element = element.replace(/\n/g, ' ')
+                if (!(/fci|FCI/g).test(arrParse[i])) {
+                    if (!((/^TRADUCCI|^Traducci/)).test(element)) {
+                        arrText.push(element)
                     }
                 }
             });
+            let arrText2 = [];
+            arrText.forEach((element, i) => {
+                if (!(/^FEDERATION/).test(arrText[i])) {
+                    arrText2.push(element)
+                }
+            });
+            let arrText3 = [];
+
+            arrText2.forEach((element, i) => {
+                if ((/^[0-9]/).test(element)) {
+                    element = element.replace(/^[0-9]/, '')
+                }
+                element = element.replace(/ {1,}/g, ' ')
+                element = element.replace(/^ |^  /, '')
+                arrText3.push(element)
+                // if (!(/^[0-9]/).test(element)) {
+                //     element = element.replace(/ {1,}$/, '')
+                //     arrText3.push(element)
+                // }
+            });
+
+            let arrText4 = []
+            arrText3.forEach((e => {
+                if (!(/^[0-9]/).test(e) && e.length > 2) {
+                    arrText4.push(e)
+                }
+            }))
+
+            let dataObj = {raza: [], tamano:[]}
+
+            if ((/[()]/).test(arrText4[0])) {
+                let arr1 = arrText4[0].replace(')', '')
+                let arr = arr1.split('(')
+                dataObj.raza = arr
+            } else {
+                dataObj.raza = [arrText4[0]]
+            }
+            const regxTamano = (/^TAMA|^Tama/)
+            const regx = [
+                (/^ORIGEN|^Origen/),
+                (/^FECHA|^Fecha/),
+                (/^UTILIZACI|^Utilizaci/),
+                (/^BREVE|^Breve/),
+                (/^APARIENCIA|^Apariencia/),
+                (/^COMPORTAMIENTO|^Comportamiento/),
+                (/^CABEZA|^Cabeza/),
+                (/^REGION CRANEAL|^Region craneal/),
+                (/^REGION FACIAL|^Region facial/),
+                (/^OJOS|^Ojos/),
+                (/^OREJAS|^Orejas/),
+                (/^CUELLO|^Cuello/),
+                (/^CUERPO|^Cuerpo/),
+                (/^MIEMBROS ANTERIORES|^Miembros anteriores/),
+                (/^MIEMBROS POSTERIORES|^Miembros posteriores/),
+                (/^MOVIMIENTO|^Movimiento/),
+                (/^PIEL|^Piel/),
+                (/^PELO|^Pelo/),
+                (/^COLOR|^Color/),
+                (/^FALTAS|^Faltas/),
+                (/^FALTAS GRAVES|^Faltas graves/),
+                (/^FALTAS DESCALIFICANTES|^Faltas descalificantes/),
+            ]
+            const nom = [
+                'origen',
+                'fecha',
+                'utilizado',
+                'historia',
+                'apariencia',
+                'comportamiento',
+                'cabeza',
+                'craneal',
+                'facial',
+                'ojos',
+                'orejas',
+                'cuello',
+                'cuerpo',
+                'eanteriores',
+                'eposteriores',
+                'movimiento',
+                'piel',
+                'pelo',
+                'color',
+                'faltas',
+                'graves',
+                'descalificantes',
+            ]
+            arrText4.forEach((element, i) => {
+                element = element.replace(/(.)$/, '')
+                regx.forEach((eRg, ind) => {
+                    // Tamaño y Peso 
+                    if (ind === 0 && (regxTamano).test(element)) {
+                        let ele = element.split('ltura a la cruz')
+                        if (ele.length > 1) {
+                            ele = ele[1].replace(/^: /, '')
+                        } else {
+                            ele = ele[0].replace(/^: /, '')
+                            if (ele.length === 2) {
+                                ele = ele[1]
+                            }
+                        }
+                        dataObj.tamano.push(ele)
+                    } else {
+                        if (ind === 0 && (/^Altura a la/).test(element)) {
+                            dataObj.tamano.push(element)
+                        }
+                        if (ind === 0 && (/^Peso/).test(element)) {
+                            dataObj.tamano.push(element)
+                        }
+                        if ((eRg).test(element)) {
+                            if ((/: /g).test(element)) {
+                                let arr = element.split(/: /)
+                                if (arr.length <= 2) {
+                                    dataObj[nom[ind]] = arr[1]
+                                } else {
+                                    let nvArr = []
+                                    arr.forEach((e, i) => {
+                                        if (!(eRg).test(e)) {
+                                            nvArr.push(e)
+                                        }
+                                    })
+                                    dataObj[nom[ind]] = nvArr
+                                }
+                            } else {
+                                dataObj[nom[ind]] = element // optimizar
+                            }
+                        }
+                    }
+                });
+            });
+            // dataObj.text = arrText4
+            // const objFin = {};
+
+
+            arrData.push(dataObj)
+            // console.log('Objeto creado. Pdfs procesados: ' + (contador + 1))
+            contador++
         });
-        // dataObj.text = arrText4
-        arrData.push(dataObj)
-        console.log('trabajo hecho')
-        contador++
         contadorFun()
-    });
+    }
+    contadorFun()
 }
+)
 
-// resolveAfter('./pdfs/grupo1/41.pdf')
-contadorFun()
+pdfAObjt(10)
+    .then(d => {
+        // d.forEach(element => {
+        //     console.log(element.raza)
+        // });
+        console.log(d)
+    })
 
-// for (urls in arrayUrlS) {
-//    const data = await resolveAfter(arrayUrlS[urls])
-//    arrData.push(data)
-//     console.log('trabajo hecho')
-// }
 
+
+    // resolveAfter('./pdfs/grupo1/0.pdf')
+    // for (urls in arrayUrlS) {
+
+    //    const data = await resolveAfter(arrayUrlS[urls])
+    //    arrData.push(data)
+    //     console.log('trabajo hecho')
+    // }
