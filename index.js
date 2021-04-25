@@ -46,6 +46,8 @@ const contadorFun = () => {
     }
 }
 
+// hacer que pase un arr de arrs y los procese
+
 async function resolveAfter(url) {
 
     let dataBuffer = fs.readFileSync(url);
